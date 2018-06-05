@@ -1,4 +1,4 @@
-playPause
+Play pause
 
 Encoding  : NEC
 Code      : 4B5822DD (32 bits)
@@ -56,6 +56,7 @@ unsigned int  data = 0x4BC0C03F;
 ============================================================================
 
 Next track
+
 Encoding  : NEC
 Code      : 4BC0B847 (32 bits)
 Timing[67]: 
