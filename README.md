@@ -1,4 +1,4 @@
 # Pentagon-CCC
-Prosjekt til IN1060 vår 2018
+Et semesterprosjekt til IN1060 vår 2018 ved Universitetet i Oslo
 
-Hjemsiden til prosjektet: http://www.uio.no/studier/emner/matnat/ifi/IN1060/v18/prosjekter-2018/pentagon/
+Hjemmesiden til prosjektet: http://www.uio.no/studier/emner/matnat/ifi/IN1060/v18/prosjekter-2018/pentagon/
