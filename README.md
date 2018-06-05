@@ -1,2 +1,2 @@
 # Pentagon-CCC
-Projekt til IN1060 vår 2018
+Prosjekt til IN1060 vår 2018
