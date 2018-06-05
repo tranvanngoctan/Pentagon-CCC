@@ -1,12 +1,3 @@
-/*
-  IR Transmitter Demonstration 1
-  IR-Xmit-Demo1.ino
-  Control TV using IR Library
-  IR LED must use Pin #3
-  DroneBot Workshop 2017
-  http://dronebotworkshop.com
-*/
- 
 // Include IR Remote Library by Ken Shirriff
  
 #include <IRremote.h>
