@@ -1,3 +1,12 @@
+/*
+  IR Transmitter Demonstration 1
+  IR-Xmit-Demo1.ino
+  Control TV using IR Library
+  IR LED must use Pin #3
+  DroneBot Workshop 2017
+  http://dronebotworkshop.com
+*/
+ 
 // Include IR Remote Library by Ken Shirriff
  
 #include <IRremote.h>
@@ -8,6 +17,7 @@ IRsend irsend;
 int proximity;
 int previousProximity;
 int khz = 38;
+int debounceTime = 100;
 
 // Define switch pin
 const int piezo = 12;
@@ -64,7 +74,7 @@ void loop() {
     // Close the cover
     if (!proximity) {
       // Pause
-      irsend.sendRaw(playPauseSignals, sizeof(playPauseSignals) / sizeof(playPauseSignals[0]), khz);
+      irsend.sendNEC(0x4B5822DD, 32);
       Serial.println("Pause");
       simpleSound();
       pauseMillis = millis(); // The moment user closes the cover
@@ -74,55 +84,55 @@ void loop() {
     if (proximity) {
       // Turn on the CD-player first if it is off
       if (isOff) {
-        irsend.sendRaw(powerSignals, sizeof(powerSignals) / sizeof(powerSignals[0]), khz);
+        irsend.sendNEC(0x4B20D32C, 32);
         isOff = false;
         Serial.println("Turn on");
         powerSound();
         delay(500);
       }
       // Play
-      irsend.sendRaw(playPauseSignals, sizeof(playPauseSignals) / sizeof(playPauseSignals[0]), khz);
+      irsend.sendNEC(0x4B5822DD, 32);
       Serial.println("Play");
       simpleSound();
     }
     
-    delay(40);
+    delay(debounceTime);
   }
   
   if (digitalRead(volumeUp)) {
-    irsend.sendRaw(volumeUpSignals, sizeof(volumeUpSignals) / sizeof(volumeUpSignals[0]), khz);
+    irsend.sendNEC(0x4BC040BF, 32);
     Serial.println("Volume up");
     simpleSound();
-    delay(40);
+    delay(debounceTime);
   }
 
   if (digitalRead(volumeDown)) {
-    irsend.sendRaw(volumeDownSignals, sizeof(volumeDownSignals) / sizeof(volumeDownSignals[0]), khz);
+    irsend.sendNEC(0x4BC0C03F, 32);
     Serial.println("Volume down");
     simpleSound();
-    delay(40);
+    delay(debounceTime);
   }
   
   if (digitalRead(nextTrack)) {
-    irsend.sendRaw(nextTrackSignals, sizeof(nextTrackSignals) / sizeof(nextTrackSignals[0]), khz);
+    irsend.sendNEC(0x4BC0B847, 32);
     Serial.println("Next track");
     simpleSound();
-    delay(40);
+    delay(debounceTime);
   }
 
   if (digitalRead(previousTrack)) {
-    irsend.sendRaw(previousTrackSignals, sizeof(previousTrackSignals) / sizeof(previousTrackSignals[0]), khz);
+    irsend.sendNEC(0x4BC07887, 32);
     Serial.println("Previous track");
     simpleSound();
-    delay(40);
+    delay(debounceTime);
   }
 
   if ((millis()-pauseMillis) > 10000 && (millis()-pauseMillis) < 10250 && pauseMillis != 0) {
-    irsend.sendRaw(powerSignals, sizeof(powerSignals) / sizeof(powerSignals[0]), khz);
+    irsend.sendNEC(0x4B20D32C, 32);
     Serial.println("Turn off");
     powerSound();
     isOff = true;
-    delay(40);
+    delay(debounceTime);
   }
   
   previousProximity = digitalRead(reed);
