@@ -17,7 +17,7 @@ unsigned int  data = 0x4B5822DD;
 
 ============================================================================
 
-Volume up
+// Volume up
 
 Encoding  : NEC
 Code      : 4BC040BF (32 bits)
@@ -36,7 +36,7 @@ unsigned int  data = 0x4BC040BF;
 
 ============================================================================
 
-Volume down
+// Volume down
 
 Encoding  : NEC
 Code      : 4BC0C03F (32 bits)
@@ -55,7 +55,7 @@ unsigned int  data = 0x4BC0C03F;
 
 ============================================================================
 
-Next track
+// Next track
 
 Encoding  : NEC
 Code      : 4BC0B847 (32 bits)
@@ -74,7 +74,7 @@ unsigned int  data = 0x4BC0B847;
 
 ============================================================================
 
-Previous track
+// Previous track
 
 Encoding  : NEC
 Code      : 4BC07887 (32 bits)
@@ -93,7 +93,7 @@ unsigned int  data = 0x4BC07887;
 
 ============================================================================
 
-Power
+// Power
 
 Encoding  : NEC
 Code      : 4B20D32C (32 bits)
