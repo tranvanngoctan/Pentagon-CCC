@@ -1,4 +1,4 @@
-#Play pause
+//Play pause
 
 Encoding  : NEC
 Code      : 4B5822DD (32 bits)
