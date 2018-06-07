@@ -7,8 +7,7 @@ IRsend irsend;
 
 int proximity;
 int previousProximity;
-int khz = 38;
-int debounceTime = 100;
+int debounceTime = 200;
 
 // Define switch pin
 const int piezo = 12;
@@ -18,16 +17,11 @@ const int volumeDown = 6;
 const int nextTrack = 5;
 const int previousTrack = 4;
 
-unsigned int playPauseSignals[] = {8900,4500, 550,550, 550,1700, 550,550, 550,600, 550,1700, 550,550, 550,1700, 550,1650, 550,600, 550,1700, 550,550, 550,1700, 550,1700, 500,600, 550,550, 550,600, 550,550, 550,550, 550,1700, 550,550, 600,550, 550,550, 550,1700, 550,550, 550,1700, 550,1700, 550,550, 550,1700, 550,1700, 550,1700, 550,550, 550,1700, 550};
-unsigned int volumeUpSignals[] = {8900,4450, 550,600, 550,1650, 550,600, 550,550, 550,1700, 550,550, 550,1700, 550,1700, 550,1650, 550,1700, 550,600, 550,550, 550,550, 550,600, 550,550, 550,600, 550,550, 550,1700, 550,550, 550,550, 550,600, 550,550, 550,600, 550,550, 550,1700, 550,550, 550,1700, 550,1700, 550,1650, 550,1700, 550,1700, 550,1700, 500};
-unsigned int volumeDownSignals[] = {8900,4500, 550,550, 500,1750, 550,550, 550,600, 500,1700, 550,600, 500,1700, 550,1700, 550,1700, 500,1750, 500,600, 500,600, 550,600, 500,600, 550,600, 500,600, 500,1750, 500,1700, 550,600, 500,600, 550,600, 500,600, 500,600, 550,600, 550,550, 500,600, 550,1700, 550,1700, 500,1750, 500,1700, 550,1700, 550,1700, 500};
-unsigned int nextTrackSignals[] = {8850,4500, 550,600, 500,1700, 550,600, 500,600, 550,1700, 500,600, 550,1700, 500,1750, 500,1750, 500,1700, 550,600, 550,550, 500,600, 550,600, 500,600, 550,600, 500,1700, 550,600, 550,1650, 550,1700, 550,1700, 500,600, 550,600, 500,600, 550,550, 550,1700, 550,600, 500,600, 500,600, 550,1700, 550,1700, 550,1700, 500};
-unsigned int previousTrackSignals[] = {8900,4500, 550,550, 550,1700, 550,550, 550,600, 550,1650, 550,600, 550,1650, 550,1700, 550,1700, 550,1700, 550,550, 550,550, 550,600, 550,550, 550,600, 550,550, 550,550, 550,1700, 550,1700, 550,1700, 550,1650, 550,600, 550,550, 550,550, 600,1650, 550,600, 550,550, 550,550, 550,600, 550,1700, 550,1650, 550,1700, 550};
-unsigned int powerSignals[] = {8900,4500, 550,550, 550,1700, 550,550, 550,600, 500,1700, 600,550, 550,1650, 550,1700, 550,600, 500,600, 550,1700, 550,550, 550,550, 550,600, 550,550, 550,600, 500,1700, 550,1700, 550,550, 550,1700, 550,550, 550,600, 550,1700, 550,1650, 550,600, 550,550, 550,1700, 550,550, 550,1700, 550,1700, 550,550, 550,550, 550};
-
 unsigned long currentMillis;
 unsigned long pauseMillis = 0;
 boolean isOff;
+int previousNextTrack = LOW;
+int previousPreviousTrack = LOW;
 
 void setup() {
   Serial.begin(9600);
@@ -66,6 +60,7 @@ void loop() {
     if (!proximity) {
       // Pause
       irsend.sendNEC(0x4B5822DD, 32);
+      isOff = false;
       Serial.println("Pause");
       simpleSound();
       pauseMillis = millis(); // The moment user closes the cover
@@ -79,10 +74,11 @@ void loop() {
         isOff = false;
         Serial.println("Turn on");
         powerSound();
-        delay(500);
+        delay(5000);
       }
       // Play
       irsend.sendNEC(0x4B5822DD, 32);
+      isOff = false; 
       Serial.println("Play");
       simpleSound();
     }
@@ -104,21 +100,21 @@ void loop() {
     delay(debounceTime);
   }
   
-  if (digitalRead(nextTrack)) {
+  if (digitalRead(nextTrack) && digitalRead(nextTrack) != previousNextTrack) {
     irsend.sendNEC(0x4BC0B847, 32);
     Serial.println("Next track");
     simpleSound();
     delay(debounceTime);
   }
 
-  if (digitalRead(previousTrack)) {
+  if (digitalRead(previousTrack) && digitalRead(previousTrack) != previousPreviousTrack) {
     irsend.sendNEC(0x4BC07887, 32);
     Serial.println("Previous track");
     simpleSound();
     delay(debounceTime);
   }
 
-  if ((millis()-pauseMillis) > 10000 && (millis()-pauseMillis) < 10250 && pauseMillis != 0) {
+  if ((millis()-pauseMillis) > 600000 && (millis()-pauseMillis) < 600250 && pauseMillis != 0 && !proximity && !previousProximity) {
     irsend.sendNEC(0x4B20D32C, 32);
     Serial.println("Turn off");
     powerSound();
@@ -127,5 +123,7 @@ void loop() {
   }
   
   previousProximity = digitalRead(reed);
+  previousNextTrack = digitalRead(nextTrack);
+  previousPreviousTrack = digitalRead(previousTrack);
   delay(200);
 }
