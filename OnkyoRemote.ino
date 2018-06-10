@@ -8,7 +8,7 @@ IRsend irsend;
 int proximity;
 int previousProximity;
 int debounceTime = 200;
-int turnOffTime = 20; // in minutes
+int turnOffTime = 10; // in seconds
 
 // Define switch pin
 const int piezo = 12;
@@ -115,7 +115,7 @@ void loop() {
     delay(debounceTime);
   }
 
-  if ((millis()-pauseMillis) > (60000 * turnOffTime) && (millis()-pauseMillis) < (60000 * turnOffTime + 250) && pauseMillis != 0 && !proximity && !previousProximity) {
+  if ((millis()-pauseMillis) > (1000 * turnOffTime) && (millis()-pauseMillis) < (1000 * turnOffTime + 250) && pauseMillis != 0 && !proximity && !previousProximity) {
     irsend.sendNEC(0x4B20D32C, 32);
     Serial.println("Turn off");
     powerSound();
