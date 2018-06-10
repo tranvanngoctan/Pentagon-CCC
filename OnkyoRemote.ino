@@ -8,7 +8,7 @@ IRsend irsend;
 int proximity;
 int previousProximity;
 int debounceTime = 200;
-int turnOffTime = 10; // in seconds
+int turnOffTime = 20 * 60; // in seconds
 
 // Define switch pin
 const int piezo = 12;
